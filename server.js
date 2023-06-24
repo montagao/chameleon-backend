@@ -37,9 +37,24 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  *       content:
  *         application/json:
  *           schema:
- *             type: array
- *             items:
- *               type: string
+ *             type: object
+ *             properties:
+ *               head:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               body:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               glasses:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               accessories:
+ *                 type: array
+ *                 items:
+ *                   type: string
  *     responses:
  *       200:
  *         description: URLs of the generated images
@@ -54,26 +69,33 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  *                     type: string
  */
 app.post('/generate', async (req, res) => {
-    const elements = req.body;
+    const { head, body, glasses, accessories } = req.body;
 
+    // Placeholder for URLs of generated images
     let urls = [];
-    // Loop over each element
-    for (let element of elements) {
-        // Generate an image based on the element
-        // This is a placeholder - replace with your actual image generation logic
-        let image = await generateImageFromElement(element);
 
-        // Upload the image to cloud storage and get the URL
-        // This is a placeholder - replace with your actual upload logic
+    // Assume that 'generateImage' is a function that generates an image
+    // based on the provided attribute and descriptor, and 'uploadImageToStorage' 
+    // uploads the image to cloud storage and returns the URL
+
+    for (let descriptor of head) {
+        let image = await generateImage('head', descriptor);
         let url = await uploadImageToStorage(image);
-
         urls.push(url);
     }
 
-    // Return the URLs for the generated images
+    for (let descriptor of body) {
+        let image = await generateImage('body', descriptor);
+        let url = await uploadImageToStorage(image);
+        urls.push(url);
+    }
+
+    // Similarly for 'glasses' and 'accessories'
+
     res.json({ urls });
 });
 
+
 app.listen(3001, () => {
-  console.log('Server is listening on port 3001');
+    console.log('Server is listening on port 3001');
 });

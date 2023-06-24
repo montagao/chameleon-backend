@@ -1,5 +1,11 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
+
+// Middleware to parse JSON request bodies
+app.use(bodyParser.json());
 
 const swaggerOptions = {
     definition: {
@@ -68,3 +74,6 @@ app.post('/generate', async (req, res) => {
     res.json({ urls });
 });
 
+app.listen(3001, () => {
+  console.log('Server is listening on port 3001');
+});

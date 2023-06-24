@@ -21,7 +21,7 @@ const swaggerOptions = {
             }
         ]
     },
-    apis: ['app.js'] // point to your app file where swagger can find the doc comments
+    apis: ['server.js'] // point to your app file where swagger can find the doc comments
 };
 
 const specs = swaggerJsDoc(swaggerOptions);

@@ -1,25 +1,70 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
-// Middleware to parse JSON request bodies
-app.use(bodyParser.json());
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Image Generation Service',
+            version: '1.0.0',
+            description: 'A simple Express server for generating images'
+        },
+        servers: [
+            {
+                url: 'http://localhost:3001'
+            }
+        ]
+    },
+    apis: ['app.js'] // point to your app file where swagger can find the doc comments
+};
 
-// Define the /generate_image endpoint
-app.post('/generate', (req, res) => {
-  const { string, batch_size } = req.body;
-  
-  // Here, you can use the provided string and batch_size to generate an image
-  // Replace the placeholder code with your actual image generation logic
-  
-  // For demonstration purposes, we're just returning a sample response
-  const image = `Generated image for string "${string}" with batch size ${batch_size}`;
-  res.json({ image });
+const specs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
+/**
+ * @openapi
+ * /generate:
+ *   post:
+ *     summary: Generates images based on provided elements
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: URLs of the generated images
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 urls:
+ *                   type: array
+ *                   items:
+ *                     type: string
+ */
+app.post('/generate', async (req, res) => {
+    const elements = req.body;
+
+    let urls = [];
+    // Loop over each element
+    for (let element of elements) {
+        // Generate an image based on the element
+        // This is a placeholder - replace with your actual image generation logic
+        let image = await generateImageFromElement(element);
+
+        // Upload the image to cloud storage and get the URL
+        // This is a placeholder - replace with your actual upload logic
+        let url = await uploadImageToStorage(image);
+
+        urls.push(url);
+    }
+
+    // Return the URLs for the generated images
+    res.json({ urls });
 });
-
-// Start the server
-app.listen(3001, () => {
-  console.log('Server is listening on port 3001');
-});
-
 

@@ -44,7 +44,7 @@ def generate_nft_assets(head, body, glasses, accessories):
     assets_root = './assets/'
     assets_root_masked = './assets-masked/'
 
-    prompt_modifiers = 'aesthetic, background, high quality, pixelated, vector'
+    prompt_modifiers = ''
 
 # Your received request
 #request = {
@@ -170,7 +170,7 @@ def generate_nft_assets(head, body, glasses, accessories):
                 "description": "Chameleon NFT, made with love at ETHWaterloo 2023", 
                 "external_url": "https://chameleon.nft/", 
                 "image": image_ipfs_url, 
-                "name": "Dave Starbelly",
+                "name": "MyNft",
                 "attributes": attributes
             }
 

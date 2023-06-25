@@ -79,7 +79,7 @@ app.post('/generate', async (req, res) => {
         args: [JSON.stringify(req.body)]
     };
 
-    PythonShell.run('./your-python-script.py', options, function(err, result) {
+    PythonShell.run('./sd.py', options, function(err, result) {
         if (err) throw err;
         // result is an array consisting of messages collected during execution
         console.log('result: ', result);

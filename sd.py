@@ -137,6 +137,9 @@ def generate_nft_assets(head, body, glasses, accessories):
     backgrounds_dir = os.path.join(assets_root, '0_Backgrounds')
     background_files = [f for f in os.listdir(backgrounds_dir) if os.path.isfile(os.path.join(backgrounds_dir, f))]
 
+    # randomize the layer combinations
+    random.shuffle(layer_combinations)
+
     for combination in layer_combinations:
         # Choose a random background
         background_file = random.choice(background_files)

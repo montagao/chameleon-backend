@@ -269,4 +269,4 @@ def generate():
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3001)
+    app.run(host='0.0.0.0', port=3001, ssl_context=('/etc/letsencrypt/live/api.chameleon.wtf/fullchain.pem', '/etc/letsencrypt/live/api.chameleon.wtf/privkey.pem'))

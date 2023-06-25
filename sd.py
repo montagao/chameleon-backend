@@ -149,6 +149,9 @@ def generate_nft_assets(head, body, glasses, accessories):
 
         image_counter += 1
         # Upload the selected images to IPFS and create metadata JSON files
+        if image_counter >= 3:
+            continue
+            
 
     uploaded_files = []
 

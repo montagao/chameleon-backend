@@ -68,32 +68,25 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
  *                   items:
  *                     type: string
  */
+const { PythonShell } = require('python-shell');
+
 app.post('/generate', async (req, res) => {
     const { head, body, glasses, accessories } = req.body;
 
-    // Placeholder for URLs of generated images
-    let urls = [];
+    let options = {
+        mode: 'json',
+        pythonOptions: ['-u'], // unbuffered to ensure real-time data flow
+        args: [JSON.stringify(req.body)]
+    };
 
-    // Assume that 'generateImage' is a function that generates an image
-    // based on the provided attribute and descriptor, and 'uploadImageToStorage' 
-    // uploads the image to cloud storage and returns the URL
-
-    for (let descriptor of head) {
-        let image = await generateImage('head', descriptor);
-        let url = await uploadImageToStorage(image);
-        urls.push(url);
-    }
-
-    for (let descriptor of body) {
-        let image = await generateImage('body', descriptor);
-        let url = await uploadImageToStorage(image);
-        urls.push(url);
-    }
-
-    // Similarly for 'glasses' and 'accessories'
-
-    res.json({ urls });
+    PythonShell.run('./your-python-script.py', options, function(err, result) {
+        if (err) throw err;
+        // result is an array consisting of messages collected during execution
+        console.log('result: ', result);
+        res.json({ urls: result[0].urls });
+    });
 });
+
 
 function generateImage(attribute, descriptor) {
     // Placeholder for generating an image

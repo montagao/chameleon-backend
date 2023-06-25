@@ -129,27 +129,26 @@ def generate_nft_assets(head, body, glasses, accessories):
                 layered_images[category] = []
             layered_images[category].append(img_path)
 
-# Create a list of all possible combinations
-    layer_combinations = list(itertools.product(*[layered_images[category] for category in layer_order]))
+# Create a list of all possible combinations without the background layer
+    layer_combinations = list(itertools.product(*[layered_images[category] for category in layer_order if category != "0_Backgrounds"]))
 
 # Create the final images
     image_counter = 0
     backgrounds_dir = os.path.join(assets_root, '0_Backgrounds')
     background_files = [f for f in os.listdir(backgrounds_dir) if os.path.isfile(os.path.join(backgrounds_dir, f))]
 
-    for background_file in background_files:
-        for combination in layer_combinations:
-            # Choose a random background
-            chosen_background = os.path.join(backgrounds_dir, background_file)
-            traits_categories = {file.split('_')[0]: category for category, files in layered_images.items() for file in files}
+    for combination in layer_combinations:
+        # Choose a random background
+        background_file = random.choice(background_files)
+        chosen_background = os.path.join(backgrounds_dir, background_file)
+        traits_categories = {file.split('_')[0]: category for category, files in layered_images.items() for file in files}
 
+        # Generate final image
+        result_img = os.path.join(timestamp, f'final_{image_counter}.png')
+        subprocess.call(['convert', chosen_background] + list(combination) + ['-flatten', result_img])
 
-            # Generate final image
-            result_img = os.path.join(timestamp, f'final_{image_counter}.png')
-            subprocess.call(['convert', chosen_background] + list(combination) + ['-flatten', result_img])
-
-            image_counter += 1
-            # Upload the selected images to IPFS and create metadata JSON files
+        image_counter += 1
+        # Upload the selected images to IPFS and create metadata JSON files
 
     uploaded_files = []
 

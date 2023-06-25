@@ -35,7 +35,7 @@ def generate_nft_assets(head, body, glasses, accessories):
 
 
 # Setup API client
-    api = webuiapi.WebUIApi(host='31.12.82.146', port=14390)
+    api = webuiapi.WebUIApi(host='0.0.0.0', port=3000)
 
     glasses_mask_path = './glasses_mask.png'
 
@@ -195,9 +195,11 @@ def generate_nft_assets(head, body, glasses, accessories):
 # Flask imports
 from flask import Flask, request, jsonify
 from flasgger import Swagger, swag_from
+from flask_cors import CORS
 
 # Create Flask app and Swagger
 app = Flask(__name__)
+CORS(app)
 swagger = Swagger(app)  # You can provide a template here as in the previous example
 
 
@@ -257,6 +259,7 @@ swagger = Swagger(app)  # You can provide a template here as in the previous exa
 def generate():
     data = request.get_json()
     result = generate_nft_assets(data.get('head'), data.get('body'), data.get('glasses'), data.get('accessories'))
+
     return jsonify(result)
 
 if __name__ == '__main__':
